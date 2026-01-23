@@ -1,0 +1,15 @@
+table ajustes {
+  id int [pk, increment]
+  nombre varchar
+  descripcion text
+  sucursal varchar
+  direccion text
+  telefono varchar
+  logo varchar
+  logo_auto varchar
+  divisa varchar
+  correo_electronico varchar
+  pagina_web varchar
+  creado_en timestamp 
+  actualizado_en timestamp 
+}
