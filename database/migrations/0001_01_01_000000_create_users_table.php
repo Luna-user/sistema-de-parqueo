@@ -18,6 +18,23 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+
+            $table->string('nombres');
+            $table->string('apellidos');
+            $table->enum('tipo_documento', ['DNI', 'CARNET DE EXTRANJERIA', 'PASAPORTE', 'RUC','CI']);
+            $table->string('nro_documento')->unique();
+            $table->string('telefono');
+            $table->string('fecha_nacimiento');
+            $table->enum('genero', ['Masculino', 'Femenino','Otro']);
+            $table->string('direccion');
+            $table->string('foto')->nullable();
+            $table->string('contacto_nombre');
+            $table->string('contacto_telefono');
+            $table->string('contacto_parentesco');
+            $table->boolean('estado')->default(true);
+            $table->softDeletes();
+
+
             $table->timestamps();
         });
 
