@@ -10,6 +10,29 @@ table ajustes {
   divisa varchar
   correo_electronico varchar
   pagina_web varchar
-  creado_en timestamp 
-  actualizado_en timestamp 
+  created_at timestamp 
+  updated_at timestamp 
+}
+table usuarios {
+  id int [pk, increment]
+  name varchar
+  email varchar 
+  password varchar
+  remember_token varchar 
+
+  nombres varchar
+  apellidos varchar
+  tipo_documento varchar
+  nro_documento varchar
+  telefono varchar
+  fecha_nacimiento date
+  genero varchar
+  direccion text
+  foto varchar
+  contacto_nombre varchar
+  contacto_telefono varchar
+  contacto_parentesco varchar
+
+  created_at timestamp 
+  updated_at timestamp 
 }
