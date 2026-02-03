@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
+        $this->call(RoleSeeder::class);
         //superAdmin
         User::create([
             'name' => 'Super Admin',
@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'contacto_telefono' => '75048574',
             'contacto_parentesco' => 'Padre',
             'estado' => true,
-        ]);
+        ])->assignRole('SUPER ADMIN');
 
         Ajuste::create([
             'nombre' => 'Sistema de Parqueo Av. Bush',

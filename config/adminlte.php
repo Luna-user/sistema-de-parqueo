@@ -319,6 +319,12 @@ return [
             'icon' => 'fas fa-fw fa-user-shield',
             'classes' => 'bg-blue text-white',
         ],
+        [
+            'text' => 'Usuarios',
+            'url' => 'admin/usuarios',
+            'icon' => 'fas fa-fw fa-user',
+            'classes' => 'bg-blue text-white',
+        ],
 
         ['header' => 'Ajustes del Sistema'],
         [

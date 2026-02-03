@@ -12,7 +12,7 @@
                     <a href="{{ url('/admin') }}">Inicio</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a href="{{ url('/admin') }}">Listado de Roles</a>
+                    <a href="{{ url('/admin/roles') }}">Listado de Roles</a>
                 </li>
             </ol>
         </div>
