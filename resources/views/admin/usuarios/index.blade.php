@@ -57,43 +57,75 @@
                                 <td>{{ $usuario->tipo_documento }}</td>
                                 <td>{{ $usuario->nro_documento }}</td>
                                 <td>{{ $usuario->telefono }}</td>
-                                <td>{{ $usuario->estado }}</td>
+                                <td style="text-align: center;">
+                                    @if ($usuario->estado == 1)
+                                        <span class="badge badge-success">Activo</span>
+                                    @else
+                                        <span class="badge badge-danger">Inactivo</span>
+                                    @endif
+                                </td>
 
                                 <td class="d-flex justify-content-center">
-                                    <a href="{{ url('/admin/usuario/' . $usuario->id) }}" class="btn btn-info btn-sm">
-                                        <i class="fas fa-eye"></i> Ver
-                                    </a>
-                                    <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="POST" id="miFormulario{{ $usuario->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="preguntar{{ $usuario->id }}(event)">
-                                            <i class="fas fa-trash"></i> Eliminar
-                                        </button>
-                                    </form>
-
-                                    {{-- Script dinámico para cada botón de borrar --}}
-                                    <script>
-                                        function preguntar{{ $usuario->id }}(event) {
-                                            event.preventDefault();
-                                            Swal.fire({
-                                                title: '¿Eliminar Usuario?',
-                                                text: "Desea eliminar el usuario: {{ $usuario->name }}",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Sí, eliminar',
-                                                cancelButtonText: 'Cancelar'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    document.getElementById('miFormulario{{ $usuario->id }}').submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
+                                    @if (!($usuario->deleted_at))
+                                        <a href="{{ url('/admin/usuario/' . $usuario->id) }}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> Ver
+                                        </a>
+                                        <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="POST" id="miFormulario{{ $usuario->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="preguntar{{ $usuario->id }}(event)">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
+                                        </form>
+                                        <script>
+                                            function preguntar{{ $usuario->id }}(event) {
+                                                event.preventDefault();
+                                                Swal.fire({
+                                                    title: '¿Eliminar Usuario?',
+                                                    text: "Desea eliminar el usuario: {{ $usuario->name }}",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Sí, eliminar',
+                                                    cancelButtonText: 'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('miFormulario{{ $usuario->id }}').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    @else
+                                        <form action="{{ url('/admin/usuario/' . $usuario->id . '/restaurar') }}" method="POST" id="miFormulario{{ $usuario->id }}">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning btn-sm" onclick="preguntar{{ $usuario->id }}(event)">
+                                                <i class="fas fa-save"></i> Restaurar Usuario
+                                            </button>
+                                        </form>
+                                        <script>
+                                            function preguntar{{ $usuario->id }}(event) {
+                                                event.preventDefault();
+                                                Swal.fire({
+                                                    title: '¿Restaurar Usuario?',
+                                                    text: "Desea restaurar el usuario: {{ $usuario->name }}",
+                                                    icon: 'question',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#28a745',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Sí, restaurar',
+                                                    cancelButtonText: 'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('miFormulario{{ $usuario->id }}').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
