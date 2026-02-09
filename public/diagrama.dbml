@@ -36,3 +36,11 @@ table usuarios {
   created_at timestamp 
   updated_at timestamp 
 }
+Table espacios{
+  id int [pk, increment]
+  numero varchar
+  estado varchar
+
+  created_at timestamp 
+  updated_at timestamp
+}
