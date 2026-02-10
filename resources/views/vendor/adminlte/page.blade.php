@@ -55,4 +55,16 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (($mensaje = Session::get('mensaje')) && ($icono = Session::get('icono')))
+        <script>
+            Swal.fire({
+                icon: "{{ $icono }}",
+                title: "{{ $mensaje }}",
+                showConfirmButton: false,
+                timer: 3500,
+                timerProgressBar: true
+            });
+        </script>
+    @endif
 @stop

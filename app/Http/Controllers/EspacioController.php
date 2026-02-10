@@ -41,8 +41,8 @@ class EspacioController extends Controller
         $espacio->estado = $request->estado;
         $espacio->save();
         return redirect()->route('admin.espacios.index')
-            ->with('success', 'Espacio creado correctamente')
-            ->with('error', 'Error al crear el espacio');
+            ->with('mensaje', 'Espacio creado correctamente')
+            ->with('icono', 'success');
     }
 
     /**
@@ -70,8 +70,8 @@ class EspacioController extends Controller
         $espacio->estado = $request->estado;
         $espacio->save();
         return redirect()->route('admin.espacios.index')
-            ->with('success', 'Estado del espacio actualizado correctamente')
-            ->with('error', 'Error al actualizar el estado del espacio');
+            ->with('mensaje', 'Estado del espacio actualizado correctamente')
+            ->with('icono', 'success');
     }
 
     /**
