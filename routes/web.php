@@ -63,3 +63,11 @@ Route::put('/admin/espacio/{id}', [App\Http\Controllers\EspacioController::class
 
 Route::delete('/admin/espacio/{id}', [App\Http\Controllers\EspacioController::class, 'destroy'])->name('admin.espacios.destroy')->middleware('auth');
 
+// Rutas para tarifas
+
+Route::get('/admin/tarifas', [App\Http\Controllers\TarifaController::class, 'index'])->name('admin.tarifas.index')->middleware('auth');
+
+Route::get('/admin/tarifas/create', [App\Http\Controllers\TarifaController::class, 'create'])->name('admin.tarifas.create')->middleware('auth');
+
+Route::post('/admin/tarifas/create', [App\Http\Controllers\TarifaController::class, 'store'])->name('admin.tarifas.store')->middleware('auth');
+

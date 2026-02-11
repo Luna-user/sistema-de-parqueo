@@ -44,3 +44,14 @@ Table espacios{
   created_at timestamp 
   updated_at timestamp
 }
+
+Table tarifas {
+  id int [pk, increment]
+  nombre varchar
+  tipo varchar
+  costo decimal(10,2)
+  minutos_de_gracia int
+  
+  created_at timestamp 
+  updated_at timestamp
+}

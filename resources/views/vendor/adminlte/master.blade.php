@@ -19,6 +19,13 @@
         @yield('title_postfix', config('adminlte.title_postfix', ''))
     </title>
 
+    <style>
+        .main-sidebar .nav-link.active {
+            background-color: #ffffffff !important;
+            color: #0400ffff !important;
+        }
+    </style>
+
     {{-- IFrame Preloader Removal Workaround --}}
     <!-- IFrame Preloader Removal Workaround -->
     <style type="text/css">
