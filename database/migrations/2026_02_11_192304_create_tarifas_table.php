@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('tarifas', function (Blueprint $table) {
             $table->id();
 
-            $table->enum('nombre', ['regular', 'nocturno', 'fin_de_semana', 'mensual']);
+            $table->enum('nombre', ['regular', 'nocturno', 'fin_de_semana', 'feriados']);
             $table->enum('tipo', ['por_hora', 'por_dia']);
             $table->decimal('costo', 10, 2);
+            $table->integer('cantidad');
             $table->integer('minutos_de_gracia');
             
             $table->timestamps();

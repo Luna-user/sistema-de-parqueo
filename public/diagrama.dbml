@@ -49,6 +49,7 @@ Table tarifas {
   id int [pk, increment]
   nombre varchar
   tipo varchar
+  cantidad int
   costo decimal(10,2)
   minutos_de_gracia int
   

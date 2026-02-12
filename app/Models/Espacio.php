@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Espacio extends Model
 {
-    //
+    protected $table = 'espacios';
+    protected $fillable = [
+        'numero',
+        'estado',
+    ];
 }
