@@ -32,10 +32,9 @@ return new class extends Migration
             $table->string('contacto_telefono');
             $table->string('contacto_parentesco');
             $table->boolean('estado')->default(true);
-            $table->softDeletes();
-
 
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -341,6 +341,13 @@ return [
             'classes' => 'bg-blue text-white',
             'active' => ['admin/tarifa*']
         ],
+        [
+            'text' => 'Clientes',
+            'url' => 'admin/clientes',
+            'icon' => 'fas fa-fw fa-user',
+            'classes' => 'bg-blue text-white',
+            'active' => ['admin/cliente*']
+        ],
 
         ['header' => 'Ajustes del Sistema'],
         [

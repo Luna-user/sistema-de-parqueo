@@ -56,3 +56,30 @@ Table tarifas {
   created_at timestamp 
   updated_at timestamp
 }
+
+Table clientes{
+  id int [pk, increment]
+  nombres string
+  numero_documento string
+  email string
+  telefono string
+  genero string
+  estado boolean
+
+  created_at timestamp 
+  updated_at timestamp
+}
+
+Table vehiculos{
+  id int [pk, increment]
+  cliente_id int [ref: > clientes.id]
+  placa string
+  marca string
+  modelo string
+  color string
+  tipo string
+
+  created_at timestamp 
+  updated_at timestamp
+}
+
