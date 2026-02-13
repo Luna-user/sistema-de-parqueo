@@ -344,7 +344,7 @@ return [
         [
             'text' => 'Clientes',
             'url' => 'admin/clientes',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-users',
             'classes' => 'bg-blue text-white',
             'active' => ['admin/cliente*']
         ],

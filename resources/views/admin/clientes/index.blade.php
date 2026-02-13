@@ -55,39 +55,76 @@
                                 <td>{{ $cliente->email }}</td>
                                 <td>{{ $cliente->telefono }}</td>
                                 <td>{{ $cliente->genero }}</td>
-                                <td>{{ $cliente->estado }}</td>
+                                <td style="text-align: center;">
+                                    @if ($cliente->estado == 1)
+                                        <span class="badge badge-success">Activo</span>
+                                    @else
+                                        <span class="badge badge-danger">Inactivo</span>
+                                    @endif
+                                </td>
                                 <td class="d-flex justify-content-center">
-                                    <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="POST" id="miFormulario{{ $cliente->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="preguntar{{ $cliente->id }}(event)">
-                                            <i class="fas fa-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    @if (!($cliente->deleted_at))
+                                        {{-- MOSTRAR SOLO SI EL CLIENTE NO ESTÁ ELIMINADO --}}
+                                        <a href="{{ url('/admin/cliente/' . $cliente->id) }}" class="btn btn-info btn-sm mr-1">
+                                            <i class="fas fa-car"></i> Ver
+                                        </a>
+                                        <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="POST" id="formEliminar{{ $cliente->id }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="preguntarEliminar{{ $cliente->id }}()">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
+                                        </form>
 
-                                    {{-- Script dinámico para cada botón de borrar --}}
-                                    <script>
-                                        function preguntar{{ $cliente->id }}(event) {
-                                            event.preventDefault();
-                                            Swal.fire({
-                                                title: '¿Eliminar Cliente?',
-                                                text: "Desea eliminar el cliente: {{ $cliente->nombres }}",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Sí, eliminar',
-                                                cancelButtonText: 'Cancelar'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    document.getElementById('miFormulario{{ $cliente->id }}').submit();
-                                                }
-                                            });
-                                        }
-                                    </script>
+                                        <script>
+                                            function preguntarEliminar{{ $cliente->id }}() {
+                                                Swal.fire({
+                                                    title: '¿Eliminar Cliente?',
+                                                    text: "Desea eliminar el cliente: {{ $cliente->nombres }}",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Sí, eliminar',
+                                                    cancelButtonText: 'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('formEliminar{{ $cliente->id }}').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    @else
+                                        {{-- MOSTRAR SOLO SI EL CLIENTE ESTÁ ELIMINADO (SOFT DELETE) --}}
+                                        <form action="{{ url('/admin/cliente/' . $cliente->id . '/restaurar') }}" method="POST" id="formRestaurar{{ $cliente->id }}">
+                                            @csrf
+                                            <button type="button" class="btn btn-warning btn-sm" onclick="preguntarRestaurar{{ $cliente->id }}()">
+                                                <i class="fas fa-undo"></i> Restaurar Cliente
+                                            </button>
+                                        </form>
+
+                                        <script>
+                                            function preguntarRestaurar{{ $cliente->id }}() {
+                                                Swal.fire({
+                                                    title: '¿Restaurar Cliente?',
+                                                    text: "Desea restaurar el cliente: {{ $cliente->nombres }}",
+                                                    icon: 'question',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#28a745',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Sí, restaurar',
+                                                    cancelButtonText: 'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('formRestaurar{{ $cliente->id }}').submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

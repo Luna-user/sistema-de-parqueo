@@ -12,7 +12,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes = Cliente::all();
+        $clientes = Cliente::withTrashed()->get();
         return view('admin.clientes.index', compact('clientes'));
     }
 
@@ -53,32 +53,71 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        //
+        $cliente = Cliente::find($id);
+        return view('admin.clientes.show', compact('cliente'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cliente $cliente)
+    public function edit($id)
     {
-        //
+        $cliente = Cliente::find($id);
+        return view('admin.clientes.edit', compact('cliente'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, $id)
     {
-        //
+        $cliente = Cliente::find($id);
+        
+        $request->validate([
+            'nombres' => 'required',
+            'numero_documento' => 'required',
+            'email' => 'required',
+            'telefono' => 'required',
+            'genero' => 'required',
+        ]);
+
+        $cliente->nombres = $request->nombres;
+        $cliente->numero_documento = $request->numero_documento;
+        $cliente->email = $request->email;
+        $cliente->telefono = $request->telefono;
+        $cliente->genero = $request->genero;
+        $cliente->save();
+
+        return redirect()->route('admin.clientes.index')
+            ->with('mensaje', 'Cliente actualizado exitosamente')
+            ->with('icono', 'success');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        $cliente = Cliente::find($id);
+
+        $cliente->estado = false;
+        $cliente->save();
+        $cliente->delete();
+        return redirect()->route('admin.clientes.index')
+            ->with('mensaje', 'Cliente eliminado exitosamente')
+            ->with('icono', 'success');
+    }
+    public function restore($id)
+    {
+        $cliente = Cliente::withTrashed()->find($id);
+        $cliente->restore();
+        $cliente->estado = true;
+        $cliente->save();
+        
+        return redirect()->route('admin.clientes.index')
+            ->with('mensaje', 'Cliente restaurado exitosamente')
+            ->with('icono', 'success');
     }
 }
