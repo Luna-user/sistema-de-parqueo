@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Espacio;
 use App\Models\Tarifa;
 use App\Models\Cliente;
+use App\Models\Vehiculo;
 
 class DatabaseSeeder extends Seeder
 {
@@ -168,7 +169,7 @@ class DatabaseSeeder extends Seeder
 
         //Clientes
         //cliente1
-        Cliente::create([
+        $cliente1 = Cliente::create([
             'nombres' => 'Juan Daniel Villagomez',
             'numero_documento' => '12345678',
             'email' => 'juan@gmail.com',
@@ -176,8 +177,16 @@ class DatabaseSeeder extends Seeder
             'genero' => 'Masculino',
             'estado' => true
         ]);
+        Vehiculo::create([
+            'cliente_id' => $cliente1->id,
+            'placa' => 'ABC-123',
+            'marca' => 'Toyota',
+            'modelo' => 'Corolla',
+            'color' => 'Blanco',
+            'tipo' => 'Auto',
+        ]);
         //cliente2
-        Cliente::create([
+        $cliente2 = Cliente::create([
             'nombres' => 'Maria Fernanda', 
             'numero_documento' => '87654321',
             'email' => 'maria@gmail.com',
@@ -185,8 +194,16 @@ class DatabaseSeeder extends Seeder
             'genero' => 'Femenino',
             'estado' => true
         ]);
+        Vehiculo::create([
+            'cliente_id' => $cliente2->id,
+            'placa' => 'XYZ-789',
+            'marca' => 'Honda',
+            'modelo' => 'Civic',
+            'color' => 'Rojo',
+            'tipo' => 'Auto',
+        ]);
         //cliente3
-        Cliente::create([
+        $cliente3 = Cliente::create([
             'nombres' => 'Pedro Jose',
             'numero_documento' => '12311199',
             'email' => 'pedro@gmail.com',
@@ -194,8 +211,16 @@ class DatabaseSeeder extends Seeder
             'genero' => 'Masculino',
             'estado' => true
         ]);
+        Vehiculo::create([
+            'cliente_id' => $cliente3->id,
+            'placa' => 'DEF-456',
+            'marca' => 'Nissan',
+            'modelo' => 'Sentra',
+            'color' => 'Azul',
+            'tipo' => 'Auto',
+        ]);
         //cliente4
-        Cliente::create([
+        $cliente4 = Cliente::create([
             'nombres' => 'Ana Maria',
             'numero_documento' => '87654333',
             'email' => 'ana@gmail.com',
@@ -203,8 +228,16 @@ class DatabaseSeeder extends Seeder
             'genero' => 'Femenino',
             'estado' => true
         ]);
+        Vehiculo::create([
+            'cliente_id' => $cliente4->id,
+            'placa' => 'GHI-123',
+            'marca' => 'Kia',
+            'modelo' => 'Picanto',
+            'color' => 'Blanco',
+            'tipo' => 'Auto',
+        ]);
         //cliente5
-        Cliente::create([
+        $cliente5 = Cliente::create([
             'nombres' => 'Luis Fernando',
             'numero_documento' => '12349131',
             'email' => 'luis@gmail.com',
@@ -212,50 +245,13 @@ class DatabaseSeeder extends Seeder
             'genero' => 'Masculino',
             'estado' => true
         ]);
-        //cliente6
-        Cliente::create([
-            'nombres' => 'Sofia Fernanda',
-            'numero_documento' => '87654427',
-            'email' => 'sofia@gmail.com',
-            'telefono' => '75048085',
-            'genero' => 'Femenino',
-            'estado' => true
-        ]);
-        //cliente7
-        Cliente::create([
-            'nombres' => 'Carlos Jose',
-            'numero_documento' => '12362315',
-            'email' => 'carlos@gmail.com',
-            'telefono' => '75048086',
-            'genero' => 'Masculino',
-            'estado' => true
-        ]);
-        //cliente8
-        Cliente::create([
-            'nombres' => 'Laura Fernanda',
-            'numero_documento' => '87651654',
-            'email' => 'laura@gmail.com',
-            'telefono' => '75048087',
-            'genero' => 'Femenino',
-            'estado' => true
-        ]);
-        //cliente9
-        Cliente::create([
-            'nombres' => 'Miguel Jose',
-            'numero_documento' => '12345779',
-            'email' => 'miguel@gmail.com',
-            'telefono' => '75048088',
-            'genero' => 'Masculino',
-            'estado' => true
-        ]);
-        //cliente10
-        Cliente::create([
-            'nombres' => 'Camila Fernanda',
-            'numero_documento' => '87654789',
-            'email' => 'camila@gmail.com',
-            'telefono' => '75048089',
-            'genero' => 'Femenino',
-            'estado' => true
+        Vehiculo::create([
+            'cliente_id' => $cliente5->id,
+            'placa' => 'JKL-456',
+            'marca' => 'Yamaha',
+            'modelo' => 'MT-07',
+            'color' => 'Negro',
+            'tipo' => 'Moto',
         ]);
     }
 }

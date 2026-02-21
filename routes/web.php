@@ -102,3 +102,19 @@ Route::post('/admin/clientes/vehiculos/create', [App\Http\Controllers\VehiculoCo
 Route::put('/admin/clientes/vehiculo/{id}', [App\Http\Controllers\VehiculoController::class, 'update'])->name('admin.clientes.vehiculo.update')->middleware('auth');
 
 Route::delete('/admin/clientes/vehiculo/{id}', [App\Http\Controllers\VehiculoController::class, 'destroy'])->name('admin.clientes.vehiculo.destroy')->middleware('auth');
+
+// Rutas para tickets
+
+Route::get('/admin/tickets', [App\Http\Controllers\TicketController::class, 'index'])->name('admin.tickets.index')->middleware('auth');
+
+Route::get('/admin/tickets/create', [App\Http\Controllers\TicketController::class, 'create'])->name('admin.tickets.create')->middleware('auth');
+
+Route::post('/admin/tickets/create', [App\Http\Controllers\TicketController::class, 'store'])->name('admin.tickets.store')->middleware('auth');
+
+Route::get('/admin/ticket/{id}', [App\Http\Controllers\TicketController::class, 'show'])->name('admin.tickets.show')->middleware('auth');
+
+Route::get('/admin/ticket/{id}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('admin.tickets.edit')->middleware('auth');
+
+Route::put('/admin/ticket/{id}', [App\Http\Controllers\TicketController::class, 'update'])->name('admin.tickets.update')->middleware('auth');
+
+Route::delete('/admin/ticket/{id}', [App\Http\Controllers\TicketController::class, 'destroy'])->name('admin.tickets.destroy')->middleware('auth');
