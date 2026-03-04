@@ -11,7 +11,7 @@ use App\Models\Espacio;
 use App\Models\Vehiculo;
 use App\Models\Tarifa;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf as Pdf;
 
 class TicketController extends Controller
 {
@@ -101,17 +101,16 @@ class TicketController extends Controller
         $ajuste = Ajuste::first();
         $fecha_hora = Carbon::now();
         $pdf = Pdf::loadView('admin.tickets.ticket_pdf', compact('ticket', 'ajuste', 'fecha_hora'));
-        return $pdf->stream("ticket.pdf");
 
         //Configuracion para impresora termica (80mm de ancho, alto automatico)
-        $pdf->setPaper([
-            'dpi' => 120,
-            'defaultPaperSize' => [0,0,226,77,0],
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true,
-            'defaultFont' => 'Arial Narrow',
-        ]);
-        $pdf->setPaper([0,0,226,77,999999]); //80mm de ancho y alto infinito
+        //$pdf->setPaper([
+            //'dpi' => 120,
+            //'defaultPaperSize' => [0,0,226,77,0],
+            //'isHtml5ParserEnabled' => true,
+            //'isRemoteEnabled' => true,
+            //'defaultFont' => 'Arial Narrow'
+        //]);
+        $pdf->setPaper([0, 0, 226.77, 600], 'portrait');
         return $pdf->stream("ticket.pdf");
     }
 

@@ -2,69 +2,76 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket</title>
     <style>
+        @media print {
+            @page {
+                size: 80mm 200mm; /* Forzamos el tamaño de la ticketera */
+                margin: 0;
+            }
+        }
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: "Courier New", Courier, monospace;
             font-size: 12px;
-            line-height: 1.2;
-            width: 300px;
-            max-width: 300px;
-            overflow-x: hidden;
-            margin: 0px;
-            padding: 0px;
-            background-color: #ffffffff;
+            line-height: 1.4;
+            margin: 0;
+            padding: 10px;
+            width: 100%;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .divider {
+            border-top: 1px dashed #000;
+            margin: 5px 0;
+            width: 100%;
         }
         .container {
-            border: 0px solid #000;
-            margin: 0px;
-            padding: 0px;
+            width: 100%;
+            margin: 0 auto;
         }
-        .header, .footer {
-        }
-        .line {
-            border-top: 1px dashed #000;
+        .info-section {
+            margin-top: 10px;
+            text-align: left; /* Mantiene los datos a la izquierda pero dentro del contenedor centrado */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!--encabezado-->
-        <div class="header" style="text-align: center">
-            <b>{{ $ajuste->nombre }}</b><br>
-            <b>{{ $ajuste->descripcion }}</b><br>
-            <b>Sucursal: {{ $ajuste->sucursal }}</b><br>
-            <b>{{ $ajuste->direccion }}</b><br>
-            <b>{{ $ajuste->telefono }}</b><br>
+        <div class="text-center bold">
+            {{ $ajuste->nombre }} <br>
+            {{ $ajuste->descripcion }} <br>
+            Sucursal: {{ $ajuste->sucursal }} <br>
+            {{ $ajuste->direccion }} <br>
+            {{ $ajuste->telefono }}
         </div>
-        
-        <div class="line"></div>
-        <!--Titulo-->
-        <h3 style="margin: 5px 0; font-size: 14px; text-align: center;">TICKET: {{ $ticket->codigo_ticket }}</h3>
-        <div class="line"></div>
 
-        <!--Datos del cliente-->
-        <div style="text-align: left;">
-            <strong>Datos del cliente:</strong><br>
-            <b>Señor(a):</b> {{ $ticket->cliente->nombres }} {{ $ticket->cliente->apellidos }}<br>
-            <b>Documento:</b> {{ $ticket->cliente->numero_documento }}<br>
-            <b>Placa del vehiculo:</b> {{ $ticket->vehiculo->placa }}<br>
+        <div class="divider"></div>
+        <div class="text-center bold">
+            TICKET: {{ $ticket->codigo_ticket }}
         </div>
-        <div class="line"></div>
-        <!--Datos del pago-->
-        <div>
-            <b>Espacio nro: </b>{{$ticket->espacio->numero}}<br>
-            <b>Fecha de ingreso: </b>{{$ticket->fecha_ingreso}}<br>
-            <b>Hora de ingreso: </b>{{$ticket->hora_ingreso}}<br>
+        <div class="divider"></div>
+
+        <div class="info-section">
+            <span class="bold">Datos del cliente:</span> <br>
+            <span class="bold">Señor(a):</span> {{ $ticket->cliente->nombres }} {{ $ticket->cliente->apellidos }} <br>
+            <span class="bold">Documento:</span> {{ $ticket->cliente->numero_documento }} <br>
+            <span class="bold">Placa del vehículo:</span> {{ $ticket->vehiculo->placa }} <br>
+            
+            <div class="divider"></div>
+            
+            <span class="bold">Espacio nro:</span> {{ $ticket->espacio->numero }} <br>
+            <span class="bold">Fecha de ingreso:</span> {{ $ticket->fecha_ingreso }} <br>
+            <span class="bold">Hora de ingreso:</span> {{ $ticket->hora_ingreso }}
         </div>
-        <div class="line"></div>
-        <!--firmas-->
-        <div class="footer" style="text-align: center">
-            <small style="font-size: 6pt">
-                <b>Hora de impresion: </b> {{$fecha_hora}} <br>
-                <b>Usuario: </b> {{$ticket->usuario->name}}
-            </small>
+
+        <div class="divider"></div>
+
+        <div class="text-center" style="font-size: 10px;">
+            <span class="bold">Hora de impresión:</span> {{ $fecha_hora }} <br>
+            <span class="bold">Usuario:</span> {{ $ticket->usuario->name ?? Auth::user()->name }}
         </div>
     </div>
 </body>
