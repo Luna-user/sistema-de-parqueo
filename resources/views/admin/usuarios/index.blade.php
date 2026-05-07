@@ -24,9 +24,11 @@
             <div class="card-header">
                 <h3 class="card-title"><b>Usuarios Registrados</b></h3>
                 <div class="card-tools">
+                    @can('crear usuarios')
                     <a href="{{ url('/admin/usuarios/create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Crear Nuevo Usuario
                     </a>
+                    @endcan
                 </div>
             </div>
 
@@ -67,47 +69,58 @@
 
                                 <td class="d-flex justify-content-center">
                                     @if (!($usuario->deleted_at))
-                                        <a href="{{ url('/admin/usuario/' . $usuario->id) }}" class="btn btn-info btn-sm">
+                                        @can('ver usuarios')
+                                        <a href="{{ url('/admin/usuario/' . $usuario->id_usuario) }}" class="btn btn-info btn-sm mr-1">
                                             <i class="fas fa-eye"></i> Ver
                                         </a>
-                                        <a href="{{ url('/admin/usuario/' . $usuario->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
+                                        @endcan
+
+                                        @can('editar usuarios')
+                                        <a href="{{ url('/admin/usuario/' . $usuario->id_usuario . '/edit') }}" class="btn btn-success btn-sm mr-1">
                                             <i class="fas fa-edit"></i> Editar
                                         </a>
-                                        <form action="{{ url('/admin/usuario/' . $usuario->id) }}" method="POST" id="miFormulario{{ $usuario->id }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="preguntar{{ $usuario->id }}(event)">
-                                                <i class="fas fa-trash"></i> Eliminar
-                                            </button>
-                                        </form>
-                                        <script>
-                                            function preguntar{{ $usuario->id }}(event) {
-                                                event.preventDefault();
-                                                Swal.fire({
-                                                    title: '¿Eliminar Usuario?',
-                                                    text: "Desea eliminar el usuario: {{ $usuario->name }}",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Sí, eliminar',
-                                                    cancelButtonText: 'Cancelar'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        document.getElementById('miFormulario{{ $usuario->id }}').submit();
-                                                    }
-                                                });
-                                            }
-                                        </script>
+                                        @endcan
+
+                                        @can('eliminar usuarios')
+                                            @if($usuario->id_usuario != auth()->id())
+                                            <form action="{{ url('/admin/usuario/' . $usuario->id_usuario) }}" method="POST" id="miFormulario{{ $usuario->id_usuario }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="preguntar{{ $usuario->id_usuario }}(event)">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                            <script>
+                                                function preguntar{{ $usuario->id_usuario }}(event) {
+                                                    event.preventDefault();
+                                                    Swal.fire({
+                                                        title: '¿Eliminar Usuario?',
+                                                        text: "Desea eliminar el usuario: {{ $usuario->name }}",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Sí, eliminar',
+                                                        cancelButtonText: 'Cancelar'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            document.getElementById('miFormulario{{ $usuario->id_usuario }}').submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                            @endif
+                                        @endcan
                                     @else
-                                        <form action="{{ url('/admin/usuario/' . $usuario->id . '/restaurar') }}" method="POST" id="miFormulario{{ $usuario->id }}">
+                                        @can('editar usuarios')
+                                        <form action="{{ url('/admin/usuario/' . $usuario->id_usuario . '/restaurar') }}" method="POST" id="miFormulario{{ $usuario->id_usuario }}">
                                             @csrf
-                                            <button type="submit" class="btn btn-warning btn-sm" onclick="preguntar{{ $usuario->id }}(event)">
-                                                <i class="fas fa-save"></i> Restaurar Usuario
+                                            <button type="submit" class="btn btn-warning btn-sm" onclick="preguntar{{ $usuario->id_usuario }}(event)">
+                                                <i class="fas fa-undo"></i> Restaurar Usuario
                                             </button>
                                         </form>
                                         <script>
-                                            function preguntar{{ $usuario->id }}(event) {
+                                            function preguntar{{ $usuario->id_usuario }}(event) {
                                                 event.preventDefault();
                                                 Swal.fire({
                                                     title: '¿Restaurar Usuario?',
@@ -120,11 +133,12 @@
                                                     cancelButtonText: 'Cancelar'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
-                                                        document.getElementById('miFormulario{{ $usuario->id }}').submit();
+                                                        document.getElementById('miFormulario{{ $usuario->id_usuario }}').submit();
                                                     }
                                                 });
                                             }
                                         </script>
+                                        @endcan
                                     @endif
                                 </td>
                             </tr>

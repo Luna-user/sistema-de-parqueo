@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tarifas', function (Blueprint $table) {
-            $table->id();
-
-            $table->enum('nombre', ['regular', 'nocturno', 'fin_de_semana', 'feriados']);
-            $table->enum('tipo', ['por_hora', 'por_dia']);
+        Schema::create('tipo_membresias', function (Blueprint $table) {
+            $table->id('id_tipo_membresia');
+            $table->string('nombre')->nullable(); // Ej: Mensual, Semanal, Diaria
             $table->decimal('costo', 10, 2);
-            $table->integer('cantidad');
-            $table->integer('minutos_de_gracia');
-            
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tarifas');
+        Schema::dropIfExists('tipo_membresias');
     }
 };

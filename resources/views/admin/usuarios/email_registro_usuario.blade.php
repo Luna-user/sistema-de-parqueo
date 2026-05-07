@@ -2,69 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido al Sistema de Parqueo</title>
     <style>
-        /* Estilos de respaldo para clientes que aceptan etiquetas style */
-        .button:hover {
-            background-color: #204d74 !important;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; }
+        .email-container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .header { background: linear-gradient(135deg, #007bff, #0056b3); padding: 30px 20px; text-align: center; color: #ffffff; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .content { padding: 30px; color: #333333; line-height: 1.6; }
+        .content h2 { color: #0056b3; margin-top: 0; }
+        .credentials-box { background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 20px; margin: 25px 0; border-radius: 4px; }
+        .credentials-box p { margin: 5px 0; font-size: 16px; }
+        .credentials-box strong { color: #0056b3; }
+        .btn { display: inline-block; background-color: #28a745; color: #ffffff; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; text-align: center; margin-top: 15px; }
+        .footer { background-color: #e9ecef; padding: 20px; text-align: center; font-size: 13px; color: #6c757d; border-top: 1px solid #dee2e6; }
+        .footer p { margin: 5px 0; }
+        .alert-text { color: #dc3545; font-size: 14px; font-weight: bold; }
     </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6;">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tr>
-            <td style="padding: 20px 0 30px 0;">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; border: 1px solid #cccccc; background-color: #ffffff; border-radius: 8px; overflow: hidden;">
-                    <tr>
-                        <td align="center" bgcolor="#007bff" style="padding: 40px 0 30px 0; color: #ffffff; font-size: 28px; font-weight: bold;">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" alt="Logo" width="80" style="display: block; margin-bottom: 10px;" />
-                            ¡Bienvenido al Sistema!
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td style="padding: 40px 30px 40px 30px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td style="color: #333333; font-size: 20px; font-weight: bold;">
-                                        Hola, {{ $usuario->nombres }} {{ $usuario->apellidos }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 20px 0 30px 0; color: #555555; font-size: 16px; line-height: 24px;">
-                                        Nos complace informarte que tu cuenta ha sido creada exitosamente en nuestra plataforma de parqueo. A continuación, encontrarás tus credenciales de acceso temporal.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" bgcolor="#f9f9f9" style="padding: 20px; border: 1px dashed #cccccc; border-radius: 5px;">
-                                        <p style="margin: 0; color: #777777; font-size: 14px;">Contraseña Temporal:</p>
-                                        <h2 style="margin: 10px 0; color: #007bff; letter-spacing: 2px;">{{ $passwordTemporal }}</h2>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 30px 0 10px 0; color: #555555; font-size: 15px; text-align: center;">
-                                        Por motivos de seguridad, te recomendamos cambiar esta contraseña inmediatamente después de ingresar.
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center" style="padding: 30px 0 0 0;">
-                                        <a href="{{ url('/login') }}" style="background-color: #007bff; color: #ffffff; padding: 15px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
-                                            Acceder a mi cuenta
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Bienvenido al Sistema de Parqueo</h1>
+        </div>
+        <div class="content">
+            <h2>¡Hola, {{ $usuario->nombres }}!</h2>
+            <p>Tu cuenta ha sido creada exitosamente. Ahora tienes acceso al sistema de gestión de parqueo con los roles y permisos asignados a tu perfil.</p>
+            
+            <div class="credentials-box">
+                <p><strong>Tus credenciales de acceso:</strong></p>
+                <p>Email: <strong>{{ $usuario->email }}</strong></p>
+                <p>Contraseña Temporal: <strong>{{ $passwordTemporal }}</strong></p>
+            </div>
 
-                    <tr>
-                        <td bgcolor="#f4f7f6" style="padding: 30px 30px 30px 30px; color: #999999; font-size: 12px; text-align: center;">
-                            <p style="margin: 0;">Este es un correo automático, por favor no respondas a este mensaje.</p>
-                            <p style="margin: 5px 0 0 0;">&copy; {{ date('Y') }} Sistema de Parqueo - Soporte Técnico</p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+            <p class="alert-text">⚠️ Importante: Te recomendamos cambiar esta contraseña temporal inmediatamente después de iniciar sesión por primera vez.</p>
+
+            <div style="text-align: center;">
+                <a href="{{ url('/login') }}" class="btn">Ir al Sistema</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+            <p>&copy; {{ date('Y') }} Sistema de Parqueo. Todos los derechos reservados.</p>
+        </div>
+    </div>
 </body>
 </html>

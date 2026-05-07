@@ -3,17 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Espacio extends Model
 {
     protected $table = 'espacios';
-    protected $fillable = [
-        'numero',
-        'estado',
-    ];
+    protected $primaryKey = 'id_espacio';
 
-    public function tickets()
+    protected $fillable = ['numero', 'estado'];
+
+    public function ingresos(): HasMany
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(IngresoVehiculo::class, 'espacio_id', 'id_espacio');
     }
 }

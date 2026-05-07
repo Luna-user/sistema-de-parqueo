@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -21,7 +22,11 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.roles.create');
+        $permissions = Permission::all()->groupBy(function($permission) {
+            $parts = explode(' ', $permission->name);
+            return count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : 'otros';
+        });
+        return view('admin.roles.create', compact('permissions'));
     }
 
     /**
@@ -29,13 +34,18 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //return response()->json($request->all());
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name',
+            'permissions' => 'nullable|array',
         ]);
+        
         $rol = new Role();
         $rol->name = strtoupper($request->name);
         $rol->save();
+
+        if ($request->has('permissions')) {
+            $rol->syncPermissions($request->permissions);
+        }
 
         return redirect()->route('admin.roles.index')
         ->with('mensaje', 'Rol Registrado Exitosamente.')
@@ -56,7 +66,11 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
-        return view('admin.roles.edit', compact('role'));
+        $permissions = Permission::all()->groupBy(function($permission) {
+            $parts = explode(' ', $permission->name);
+            return count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : 'otros';
+        });
+        return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
     /**
@@ -64,13 +78,20 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //return response()->json($request->all());
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,'.$id,
+            'permissions' => 'nullable|array',
         ]);
+        
         $rol = Role::findOrFail($id);
         $rol->name = strtoupper($request->name);
         $rol->save();
+
+        if ($request->has('permissions')) {
+            $rol->syncPermissions($request->permissions);
+        } else {
+            $rol->syncPermissions([]);
+        }
 
         return redirect()->route('admin.roles.index')
         ->with('mensaje', 'Rol Modificado Exitosamente.')

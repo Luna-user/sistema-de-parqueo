@@ -24,9 +24,11 @@
             <div class="card-header">
                 <h3 class="card-title"><b>Roles Registrados</b></h3>
                 <div class="card-tools">
+                    @can('crear roles')
                     <a href="{{ url('/admin/roles/create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Crear Nuevo Rol
                     </a>
+                    @endcan
                 </div>
             </div>
 
@@ -47,12 +49,16 @@
                                 <td style="text-align: center;">{{ $loop->iteration }}</td>
                                 <td>{{ $role->name }}</td>
                                 <td class="d-flex justify-content-center">
-                                    <a href="#" class="btn btn-warning btn-sm mr-1">
-                                        <i class="fas fa-check"></i> Asignar Permisos
-                                    </a>
+                                    @can('editar roles')
+                                    <a href="{{ url('/admin/rol/' . $role->id . '/edit') }}" class="btn btn-warning btn-sm mr-1">
+                                         <i class="fas fa-check"></i> Asignar Permisos
+                                     </a>
                                     <a href="{{ url('/admin/rol/' . $role->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
                                         <i class="fas fa-edit"></i> Editar
                                     </a>
+                                    @endcan
+
+                                    @can('eliminar roles')
                                     <form action="{{ url('/admin/rol/' . $role->id) }}" method="POST" id="miFormulario{{ $role->id }}">
                                         @csrf
                                         @method('DELETE')
@@ -60,6 +66,7 @@
                                             <i class="fas fa-trash"></i> Eliminar
                                         </button>
                                     </form>
+                                    @endcan
 
                                     {{-- Script dinámico para cada botón de borrar --}}
                                     <script>

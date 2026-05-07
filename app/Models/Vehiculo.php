@@ -3,26 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vehiculo extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'vehiculos';
+    protected $primaryKey = 'id_vehiculo';
+
     protected $fillable = [
-        'cliente_id',
         'placa',
+        'color',
         'marca',
         'modelo',
-        'color',
-        'tipo',
+        'cliente_id',
+        'tipo_vehiculo_id',
     ];
 
-    public function cliente()
+    public function cliente(): BelongsTo
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class, 'cliente_id', 'id_cliente');
     }
 
-    public function tickets()
+    public function tipoVehiculo(): BelongsTo
     {
-        return $this->hasMany(Ticket::class);
+        return $this->belongsTo(TipoVehiculo::class, 'tipo_vehiculo_id', 'id_tipo_vehiculo');
+    }
+
+    public function membresias(): HasMany
+    {
+        return $this->hasMany(Membresia::class, 'vehiculo_id', 'id_vehiculo');
+    }
+
+    public function ingresos(): HasMany
+    {
+        return $this->hasMany(IngresoVehiculo::class, 'vehiculo_id', 'id_vehiculo');
     }
 }

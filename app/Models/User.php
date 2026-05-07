@@ -14,6 +14,8 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
+    protected $primaryKey = 'id_usuario';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,7 +24,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'contraseña',
         'nombres',
         'apellidos',
         'tipo_documento',
@@ -44,7 +46,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'contraseña',
         'remember_token',
     ];
 
@@ -57,12 +59,15 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'contraseña'        => 'hashed',
         ];
     }
 
-    public function tickets()
+    /**
+     * Map the 'password' accessor to 'contraseña' for Laravel Auth compatibility.
+     */
+    public function getAuthPassword(): string
     {
-        return $this->hasMany(Ticket::class);
+        return $this->contraseña;
     }
 }

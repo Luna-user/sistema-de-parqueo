@@ -254,9 +254,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <p class="text-danger"><b>(*)</b> Campos Obligatorios</p>
+                            @can('editar ajustes')
                             <button type="submit" class="btn btn-primary float-right">
                                 <i class="fas fa-save"></i> Guardar
                             </button>
+                            @endcan
                         </div>
                     </div>
                     </form>

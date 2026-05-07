@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('espacios', function (Blueprint $table) {
-            $table->id();
-            $table->string('numero')->unique();
-            $table->enum('estado', ['disponible', 'ocupado', 'mantenimiento']);
+        Schema::create('bitacoras', function (Blueprint $table) {
+            $table->id('id_bitacora');
+            $table->string('accion');
+            $table->string('tabla_afectada');
+            $table->text('descripcion')->nullable();
+            $table->date('fecha');
+            $table->time('hora');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('espacios');
+        Schema::dropIfExists('bitacoras');
     }
 };

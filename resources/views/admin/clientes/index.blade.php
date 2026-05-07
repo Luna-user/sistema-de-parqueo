@@ -24,9 +24,11 @@
             <div class="card-header">
                 <h3 class="card-title"><b>Clientes Registrados</b></h3>
                 <div class="card-tools">
+                    @can('crear clientes')
                     <a href="{{ url('/admin/clientes/create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Crear Nuevo Cliente
                     </a>
+                    @endcan
                 </div>
             </div>
 
@@ -65,22 +67,29 @@
                                 <td class="d-flex justify-content-center">
                                     @if (!($cliente->deleted_at))
                                         {{-- MOSTRAR SOLO SI EL CLIENTE NO ESTÁ ELIMINADO --}}
-                                        <a href="{{ url('/admin/cliente/' . $cliente->id) }}" class="btn btn-info btn-sm mr-1">
+                                        @can('ver clientes')
+                                        <a href="{{ url('/admin/cliente/' . $cliente->id_cliente) }}" class="btn btn-info btn-sm mr-1">
                                             <i class="fas fa-car"></i> Ver
                                         </a>
-                                        <a href="{{ url('/admin/cliente/' . $cliente->id . '/edit') }}" class="btn btn-success btn-sm mr-1">
+                                        @endcan
+
+                                        @can('editar clientes')
+                                        <a href="{{ url('/admin/cliente/' . $cliente->id_cliente . '/edit') }}" class="btn btn-success btn-sm mr-1">
                                             <i class="fas fa-edit"></i> Editar
                                         </a>
-                                        <form action="{{ url('/admin/cliente/' . $cliente->id) }}" method="POST" id="formEliminar{{ $cliente->id }}">
+                                        @endcan
+
+                                        @can('eliminar clientes')
+                                        <form action="{{ url('/admin/cliente/' . $cliente->id_cliente) }}" method="POST" id="formEliminar{{ $cliente->id_cliente }}">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="preguntarEliminar{{ $cliente->id }}()">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="preguntarEliminar{{ $cliente->id_cliente }}()">
                                                 <i class="fas fa-trash"></i> Eliminar
                                             </button>
                                         </form>
 
                                         <script>
-                                            function preguntarEliminar{{ $cliente->id }}() {
+                                            function preguntarEliminar{{ $cliente->id_cliente }}() {
                                                 Swal.fire({
                                                     title: '¿Eliminar Cliente?',
                                                     text: "Desea eliminar el cliente: {{ $cliente->nombres }}",
@@ -92,22 +101,24 @@
                                                     cancelButtonText: 'Cancelar'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
-                                                        document.getElementById('formEliminar{{ $cliente->id }}').submit();
+                                                        document.getElementById('formEliminar{{ $cliente->id_cliente }}').submit();
                                                     }
                                                 });
                                             }
                                         </script>
+                                        @endcan
                                     @else
                                         {{-- MOSTRAR SOLO SI EL CLIENTE ESTÁ ELIMINADO (SOFT DELETE) --}}
-                                        <form action="{{ url('/admin/cliente/' . $cliente->id . '/restaurar') }}" method="POST" id="formRestaurar{{ $cliente->id }}">
+                                        @can('editar clientes')
+                                        <form action="{{ url('/admin/cliente/' . $cliente->id_cliente . '/restaurar') }}" method="POST" id="formRestaurar{{ $cliente->id_cliente }}">
                                             @csrf
-                                            <button type="button" class="btn btn-warning btn-sm" onclick="preguntarRestaurar{{ $cliente->id }}()">
+                                            <button type="button" class="btn btn-warning btn-sm" onclick="preguntarRestaurar{{ $cliente->id_cliente }}()">
                                                 <i class="fas fa-undo"></i> Restaurar Cliente
                                             </button>
                                         </form>
 
                                         <script>
-                                            function preguntarRestaurar{{ $cliente->id }}() {
+                                            function preguntarRestaurar{{ $cliente->id_cliente }}() {
                                                 Swal.fire({
                                                     title: '¿Restaurar Cliente?',
                                                     text: "Desea restaurar el cliente: {{ $cliente->nombres }}",
@@ -119,11 +130,12 @@
                                                     cancelButtonText: 'Cancelar'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
-                                                        document.getElementById('formRestaurar{{ $cliente->id }}').submit();
+                                                        document.getElementById('formRestaurar{{ $cliente->id_cliente }}').submit();
                                                     }
                                                 });
                                             }
                                         </script>
+                                        @endcan
                                     @endif
                                 </td>
                             </tr>

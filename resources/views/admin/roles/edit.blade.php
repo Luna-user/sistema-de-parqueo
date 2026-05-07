@@ -22,12 +22,12 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-4">
-        <div class="card card-success card-primary">
+    <div class="col-md-12">
+        <div class="card card-outline card-success">
 
             {{-- Header --}}
             <div class="card-header">
-                <h3 class="card-title"><b>Llene los Campos del Formulario</b></h3>
+                <h3 class="card-title"><b>Modificar Rol y Asignar Permisos</b></h3>
             </div>
             {{-- Body --}}
             <div class="card-body">
@@ -41,7 +41,7 @@
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            <i class="fas fa-user-check"></i>
+                                            <i class="fas fa-user-shield"></i>
                                         </span>
                                     </div>
                                     <input type="text" class="form-control"
@@ -54,14 +54,45 @@
                             </div>
                         </div>
                     </div>
+
+                    <hr>
+                    <h5 class="mb-3"><b>Asignar Permisos por Módulo</b></h5>
+                    
+                    <div class="row">
+                        @foreach($permissions as $module => $modulePermissions)
+                        <div class="col-md-3 mb-4">
+                            <div class="card h-100 shadow-sm border-light">
+                                <div class="card-header bg-light py-2">
+                                    <h6 class="mb-0 font-weight-bold text-uppercase text-primary">{{ $module }}</h6>
+                                </div>
+                                <div class="card-body py-2">
+                                    @foreach($modulePermissions as $permission)
+                                    <div class="custom-control custom-checkbox mb-1">
+                                        <input type="checkbox" 
+                                               name="permissions[]" 
+                                               value="{{ $permission->name }}" 
+                                               class="custom-control-input" 
+                                               id="perm_{{ $permission->id }}"
+                                               {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                        <label class="custom-control-label font-weight-normal" for="perm_{{ $permission->id }}">
+                                            {{ explode(' ', $permission->name)[0] }}
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
                     <hr>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-right">
                             <a href="{{ url('/admin/roles') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-circle-left"></i> Cancelar
                             </a>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Actualizar
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-save"></i> Guardar Cambios
                             </button>
                         </div>
                     </div>

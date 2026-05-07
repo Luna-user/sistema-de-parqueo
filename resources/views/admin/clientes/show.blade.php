@@ -176,27 +176,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="tipo">Tipo del Vehiculo</label><b>*</b>
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text"><i class="fas fa-truck"></i></span>
-                                                        </div>
-                                                        <select class="form-control" name="tipo" id="tipo" required>
-                                                            <option value="Auto" {{ old('tipo') == 'Auto' ? 'selected' : '' }}>Auto</option>
-                                                            <option value="Moto" {{ old('tipo') == 'Moto' ? 'selected' : '' }}>Moto</option>
-                                                            <option value="Bicicleta" {{ old('tipo') == 'Bicicleta' ? 'selected' : '' }}>Bicicleta</option>
-                                                            <option value="Camion" {{ old('tipo') == 'Camion' ? 'selected' : '' }}>Camion</option>
-                                                        </select>
-                                                    </div>
-                                                    @error('tipo')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
+                                                 <div class="form-group">
+                                                     <label for="tipo_vehiculo_id">Tipo del Vehiculo</label><b>*</b>
+                                                     <div class="input-group mb-3">
+                                                         <div class="input-group-prepend">
+                                                             <span class="input-group-text"><i class="fas fa-truck"></i></span>
+                                                         </div>
+                                                         <select class="form-control" name="tipo_vehiculo_id" id="tipo_vehiculo_id" required>
+                                                             <option value="">-- Seleccionar Tipo --</option>
+                                                             @foreach($tipo_vehiculos as $tipo)
+                                                                 <option value="{{ $tipo->id_tipo_vehiculo }}">{{ $tipo->nombre }}</option>
+                                                             @endforeach
+                                                         </select>
+                                                     </div>
+                                                 </div>
+                                             </div>
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -235,7 +230,7 @@
                                 <td>{{ $vehiculo->marca }}</td>
                                 <td>{{ $vehiculo->modelo }}</td>
                                 <td>{{ $vehiculo->color }}</td>
-                                <td>{{ $vehiculo->tipo }}</td>
+                                <td>{{ $vehiculo->tipoVehiculo->nombre ?? '—' }}</td>
                                 <td class="d-flex justify-content-center">
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#ModalEditVehiculo{{ $vehiculo->id }}">
@@ -323,21 +318,17 @@
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
-                                                                    <label for="tipo">Tipo del Vehiculo</label><b>*</b>
+                                                                    <label for="tipo_vehiculo_id">Tipo del Vehiculo</label><b>*</b>
                                                                     <div class="input-group mb-3">
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text"><i class="fas fa-truck"></i></span>
                                                                         </div>
-                                                                        <select class="form-control" name="tipo" id="tipo" required>
-                                                                            <option value="Auto" {{ old('tipo', $vehiculo->tipo) == 'Auto' ? 'selected' : '' }}>Auto</option>
-                                                                            <option value="Moto" {{ old('tipo', $vehiculo->tipo) == 'Moto' ? 'selected' : '' }}>Moto</option>
-                                                                            <option value="Bicicleta" {{ old('tipo', $vehiculo->tipo) == 'Bicicleta' ? 'selected' : '' }}>Bicicleta</option>
-                                                                            <option value="Camion" {{ old('tipo', $vehiculo->tipo) == 'Camion' ? 'selected' : '' }}>Camion</option>
+                                                                        <select class="form-control" name="tipo_vehiculo_id" id="tipo_vehiculo_id" required>
+                                                                            @foreach($tipo_vehiculos as $tipo)
+                                                                                <option value="{{ $tipo->id_tipo_vehiculo }}" {{ $vehiculo->tipo_vehiculo_id == $tipo->id_tipo_vehiculo ? 'selected' : '' }}>{{ $tipo->nombre }}</option>
+                                                                            @endforeach
                                                                         </select>
                                                                     </div>
-                                                                    @error('tipo')
-                                                                        <span class="text-danger">{{ $message }}</span>
-                                                                    @enderror
                                                                 </div>
                                                             </div>
                                                         </div>

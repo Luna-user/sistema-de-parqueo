@@ -24,9 +24,11 @@
             <div class="card-header">
                 <h3 class="card-title"><b> Espacios Registrados</b></h3>
                 <div class="card-tools">
+                    @can('crear espacios')
                     <a href="{{ url('/admin/espacios/create') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Crear Nuevo Espacio
                     </a>
+                    @endcan
                 </div>
             </div>
             {{-- Body --}}
@@ -35,17 +37,28 @@
                     @foreach ($espacios as $espacio)
                         <div class="col" style="text-align: center;">
                             <h2>{{ $espacio->numero }}</h2>
+                            
+                            @can('editar espacios')
                             <button
-                            @if ($espacio->estado == "disponible") class="btn btn-success" @endif
-                            @if ($espacio->estado == "mantenimiento") class="btn btn-warning" @endif
-                            @if ($espacio->estado == "ocupado") class="btn btn-danger" @endif
-                            data-toggle="modal" data-target="#modal_cambiar_estado{{ $espacio->id }}">
-                                <img src="{{asset('storage/logos/'.$ajuste->logo_auto ?? '')}}" 
-                                    style="max-width: 100px; margin-top: 10px;">
+                            @if ($espacio->estado == "Disponible") class="btn btn-success" @endif
+                            @if ($espacio->estado == "Mantenimiento") class="btn btn-warning" @endif
+                            @if ($espacio->estado == "Ocupado") class="btn btn-danger" @endif
+                            data-toggle="modal" data-target="#modal_cambiar_estado{{ $espacio->id_espacio }}">
+                                <i class="fas fa-car fa-3x mt-2"></i>
                             </button>
+                            @else
+                            <button
+                            @if ($espacio->estado == "Disponible") class="btn btn-success" @endif
+                            @if ($espacio->estado == "Mantenimiento") class="btn btn-warning" @endif
+                            @if ($espacio->estado == "Ocupado") class="btn btn-danger" @endif
+                            disabled>
+                                <i class="fas fa-car fa-3x mt-2"></i>
+                            </button>
+                            @endcan
 
+                            @can('editar espacios')
                             <!-- Modal -->
-                            <div class="modal fade" id="modal_cambiar_estado{{ $espacio->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="modal_cambiar_estado{{ $espacio->id_espacio }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header" style="background-color: #3cbc47ff; color: white;">
@@ -55,7 +68,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="{{ url('/admin/espacio/'. $espacio->id) }}" method="POST">
+                                            <form action="{{ url('/admin/espacio/'. $espacio->id_espacio) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row">
@@ -63,15 +76,15 @@
                                                         <label for="estado">Estado</label><b> (*)</b>
                                                         <div class="input-group mb-3">
                                                             <div class="input-group-prepend">
-                                                                <span class="input-group-text">
-                                                                    <i class="fas fa-check-circle"></i>
-                                                                </span>
-                                                            </div>
+                                                                 <span class="input-group-text">
+                                                                     <i class="fas fa-check-circle"></i>
+                                                                 </span>
+                                                             </div>
                                                             <select class="form-control" name="estado" id="estado" required>
                                                                 <option value="">Seleccione un estado</option>
-                                                                <option value="disponible" {{ old('estado') == 'disponible' ? 'selected' : '' }}>Disponible</option>
-                                                                <option value="ocupado" {{ old('estado') == 'ocupado' ? 'selected' : '' }}>Ocupado</option>
-                                                                <option value="mantenimiento" {{ old('estado') == 'mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
+                                                                <option value="Disponible" {{ old('estado', $espacio->estado) == 'Disponible' ? 'selected' : '' }}>Disponible</option>
+                                                                <option value="Ocupado" {{ old('estado', $espacio->estado) == 'Ocupado' ? 'selected' : '' }}>Ocupado</option>
+                                                                <option value="Mantenimiento" {{ old('estado', $espacio->estado) == 'Mantenimiento' ? 'selected' : '' }}>Mantenimiento</option>
                                                             </select>
                                                         </div>
                                                         @error('estado')
@@ -90,6 +103,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endcan
                             <h5><b>{{ $espacio->estado }}</b></h5>
                         </div>    
                     @endforeach

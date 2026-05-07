@@ -66,7 +66,7 @@ class EspacioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $espacio = Espacio::find($id);
+        $espacio = Espacio::findOrFail($id);
         $espacio->estado = $request->estado;
         $espacio->save();
         return redirect()->route('admin.espacios.index')

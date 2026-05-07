@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $usuarios = User::whereDoesntHave('roles', function ($query) {
@@ -22,159 +19,155 @@ class UserController extends Controller
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::where('name', '!=', 'SUPER ADMIN')->get();
         return view('admin.usuarios.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'rol' => 'required',
-            'email' => 'required|string|email|max:255|unique:users',
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'tipo_documento' => 'required|in:DNI,CARNET DE EXTRANJERIA,PASAPORTE,RUC,CI',
-            'nro_documento' => 'required|string|max:20|unique:users',
-            'telefono' => 'required|string|max:20',
-            'fecha_nacimiento' => 'required|date',
-            'genero' => 'required|in:Masculino,Femenino,Otro',
-            'direccion' => 'required|string|max:255',
-            'contacto_nombre' => 'required|string|max:255',
-            'contacto_telefono' => 'required|string|max:20',
-            'contacto_parentesco' => 'required|string|max:100',
+            'rol'                  => 'required',
+            'email'                => 'required|string|email|max:255|unique:users',
+            'nombres'              => 'required|string|max:255',
+            'apellidos'            => 'required|string|max:255',
+            'tipo_documento'       => 'required|in:DNI,CARNET DE EXTRANJERIA,PASAPORTE,RUC,CI',
+            'nro_documento'        => 'required|string|max:20|unique:users',
+            'telefono'             => 'required|string|max:20',
+            'fecha_nacimiento'     => 'required|date',
+            'genero'               => 'required|in:Masculino,Femenino,Otro',
+            'direccion'            => 'required|string|max:255',
+            'contacto_nombre'      => 'required|string|max:255',
+            'contacto_telefono'    => 'required|string|max:20',
+            'contacto_parentesco'  => 'required|string|max:100',
         ]);
 
         $passwordTemporal = Str::random(8);
 
-        $usuario = new User();
-        $usuario->name = $request->nombres . ' ' . $request->apellidos;
-        $usuario->email = $request->email;
-        $usuario->password = $passwordTemporal;
-        $usuario->nombres = $request->nombres;
-        $usuario->apellidos = $request->apellidos;
-        $usuario->tipo_documento = $request->tipo_documento;
-        $usuario->nro_documento = $request->nro_documento;
-        $usuario->telefono = $request->telefono;
-        $usuario->fecha_nacimiento = $request->fecha_nacimiento;
-        $usuario->genero = $request->genero;
-        $usuario->direccion = $request->direccion;
-        $usuario->contacto_nombre = $request->contacto_nombre;
-        $usuario->contacto_telefono = $request->contacto_telefono;
-        $usuario->contacto_parentesco = $request->contacto_parentesco;
-
-        $usuario->save();
-
-        Mail::to($usuario->email)->send(new RegistroUsuarioMail($usuario, $passwordTemporal));
+        $usuario = User::create([
+            'name'                => $request->nombres . ' ' . $request->apellidos,
+            'email'               => $request->email,
+            'contraseña'          => $passwordTemporal,
+            'nombres'             => $request->nombres,
+            'apellidos'           => $request->apellidos,
+            'tipo_documento'      => $request->tipo_documento,
+            'nro_documento'       => $request->nro_documento,
+            'telefono'            => $request->telefono,
+            'fecha_nacimiento'    => $request->fecha_nacimiento,
+            'genero'              => $request->genero,
+            'direccion'           => $request->direccion,
+            'contacto_nombre'     => $request->contacto_nombre,
+            'contacto_telefono'   => $request->contacto_telefono,
+            'contacto_parentesco' => $request->contacto_parentesco,
+            'estado'              => true,
+        ]);
 
         $usuario->assignRole($request->rol);
 
+        try {
+            Mail::to($usuario->email)->send(new RegistroUsuarioMail($usuario, $passwordTemporal));
+        } catch (\Exception $e) {
+            // No interrumpir si el mail falla
+        }
+
         return redirect()->route('admin.usuarios.index')
-            ->with('mensaje', 'Usuario registrado exitosamente y contraseña temporal enviada al correo electrónico')
+            ->with('mensaje', 'Usuario registrado y contraseña temporal enviada al correo.')
             ->with('icono', 'success');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
-        $usuario = User::find($id);
+        $usuario = User::withTrashed()->findOrFail($id);
         return view('admin.usuarios.show', compact('usuario'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $usuario = User::find($id);
-        $roles = Role::all();
+        $usuario = User::findOrFail($id);
+        $roles   = Role::where('name', '!=', 'SUPER ADMIN')->get();
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $usuario = User::find($id);
+        $usuario = User::findOrFail($id);
+
         $request->validate([
-            'rol' => 'required',
-            'email' => 'required|string|email|max:255|unique:users,email,'.$id,
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'tipo_documento' => 'required|in:DNI,CARNET DE EXTRANJERIA,PASAPORTE,RUC,CI',
-            'nro_documento' => 'required|string|max:20|unique:users,nro_documento,'.$id,
-            'telefono' => 'required|string|max:20',
-            'fecha_nacimiento' => 'required|date',
-            'genero' => 'required|in:Masculino,Femenino,Otro',
-            'direccion' => 'required|string|max:255',
-            'contacto_nombre' => 'required|string|max:255',
-            'contacto_telefono' => 'required|string|max:20',
-            'contacto_parentesco' => 'required|string|max:100',
+            'rol'                  => 'required',
+            'email'                => 'required|string|email|max:255|unique:users,email,' . $id . ',id_usuario',
+            'nombres'              => 'required|string|max:255',
+            'apellidos'            => 'required|string|max:255',
+            'tipo_documento'       => 'required|in:DNI,CARNET DE EXTRANJERIA,PASAPORTE,RUC,CI',
+            'nro_documento'        => 'required|string|max:20|unique:users,nro_documento,' . $id . ',id_usuario',
+            'telefono'             => 'required|string|max:20',
+            'fecha_nacimiento'     => 'required|date',
+            'genero'               => 'required|in:Masculino,Femenino,Otro',
+            'direccion'            => 'required|string|max:255',
+            'contacto_nombre'      => 'required|string|max:255',
+            'contacto_telefono'    => 'required|string|max:20',
+            'contacto_parentesco'  => 'required|string|max:100',
         ]);
 
-        $usuario->name = $request->nombres . ' ' . $request->apellidos;
-        $usuario->email = $request->email;
-        $usuario->nombres = $request->nombres;
-        $usuario->apellidos = $request->apellidos;
-        $usuario->tipo_documento = $request->tipo_documento;
-        $usuario->nro_documento = $request->nro_documento;
-        $usuario->telefono = $request->telefono;
-        $usuario->fecha_nacimiento = $request->fecha_nacimiento;
-        $usuario->genero = $request->genero;
-        $usuario->direccion = $request->direccion;
-        $usuario->contacto_nombre = $request->contacto_nombre;
-        $usuario->contacto_telefono = $request->contacto_telefono;
-        $usuario->contacto_parentesco = $request->contacto_parentesco;
-
-        $usuario->save();
+        $usuario->update([
+            'name'                => $request->nombres . ' ' . $request->apellidos,
+            'email'               => $request->email,
+            'nombres'             => $request->nombres,
+            'apellidos'           => $request->apellidos,
+            'tipo_documento'      => $request->tipo_documento,
+            'nro_documento'       => $request->nro_documento,
+            'telefono'            => $request->telefono,
+            'fecha_nacimiento'    => $request->fecha_nacimiento,
+            'genero'              => $request->genero,
+            'direccion'           => $request->direccion,
+            'contacto_nombre'     => $request->contacto_nombre,
+            'contacto_telefono'   => $request->contacto_telefono,
+            'contacto_parentesco' => $request->contacto_parentesco,
+        ]);
 
         $usuario->syncRoles($request->rol);
 
         return redirect()->route('admin.usuarios.index')
-            ->with('mensaje', 'Usuario actualizado exitosamente')
+            ->with('mensaje', 'Usuario actualizado exitosamente.')
             ->with('icono', 'success');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $usuario = User::find($id);
-        //verificar que no sea el mismo usuario logueado
-        if ($usuario->id == Auth::user()->id) {
-            return redirect()->back()
-                ->with('mensaje', 'No puedes eliminar tu propia cuenta.')
-                ->with('icono', 'error');
-        }else{
-            $usuario->estado = false;
-            $usuario->save();
-            $usuario->delete();
+        $usuario = User::findOrFail($id);
+
+        // Bloquear si intenta eliminarse a sí mismo
+        if ($usuario->id_usuario == auth()->id()) {
             return redirect()->route('admin.usuarios.index')
-                ->with('mensaje', 'Usuario eliminado exitosamente')
-                ->with('icono', 'success');
+                ->with('mensaje', '¡Error! No puedes eliminar tu propia cuenta de usuario.')
+                ->with('icono', 'error');
         }
+
+        // Bloquear si intenta eliminar a un SUPER ADMIN (doble seguridad)
+        if ($usuario->hasRole('SUPER ADMIN')) {
+            return redirect()->route('admin.usuarios.index')
+                ->with('mensaje', 'No se permite eliminar usuarios con el rol SUPER ADMIN.')
+                ->with('icono', 'error');
+        }
+
+        $usuario->estado = false;
+        $usuario->save();
+        $usuario->delete();
+
+        return redirect()->route('admin.usuarios.index')
+            ->with('mensaje', 'Usuario eliminado exitosamente.')
+            ->with('icono', 'success');
     }
 
     public function restore($id)
     {
-        $usuario = User::withTrashed()->find($id);
+        $usuario = User::withTrashed()->findOrFail($id);
         $usuario->restore();
         $usuario->estado = true;
         $usuario->save();
 
         return redirect()->route('admin.usuarios.index')
-            ->with('mensaje', 'Usuario restaurado exitosamente')
+            ->with('mensaje', 'Usuario restaurado exitosamente.')
             ->with('icono', 'success');
     }
 }

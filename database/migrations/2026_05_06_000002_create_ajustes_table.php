@@ -12,19 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ajustes', function (Blueprint $table) {
-            $table->id();
-            
+            $table->id('id_ajuste');
             $table->string('nombre');
-            $table->text('descripcion');
+            $table->text('descripcion')->nullable();
             $table->string('sucursal');
-            $table->text('direccion');
+            $table->string('direccion');
             $table->string('telefono');
-            $table->string('logo');
-            $table->string('logo_auto');
-            $table->string('divisa');
-            $table->string('correo_electronico');
+            $table->string('logo')->nullable();
+            $table->string('logo_auto')->nullable();
+            $table->string('divisa', 10)->default('USD'); // moneda / divisa
+            $table->decimal('monto', 10, 2)->default(0.00);
+            $table->string('correo_electronico')->nullable();
             $table->string('pagina_web')->nullable();
-
             $table->timestamps();
         });
     }

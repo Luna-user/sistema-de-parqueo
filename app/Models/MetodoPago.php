@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class MetodoPago extends Model
+{
+    protected $table = 'metodo_pagos';
+    protected $primaryKey = 'id_metodo';
+
+    protected $fillable = ['nombre'];
+
+    public function pagos(): HasMany
+    {
+        return $this->hasMany(Pago::class, 'metodo_id', 'id_metodo');
+    }
+}
